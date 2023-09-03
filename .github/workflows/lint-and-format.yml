@@ -1,11 +1,9 @@
-name: Deploy sc-bar-react-next
+name: Lint and format sc-bar-react-next
 
 on:
   push:
     branches:
-      - main
-    tags:
-      - v*
+      - '*'
 
 jobs:
   check:

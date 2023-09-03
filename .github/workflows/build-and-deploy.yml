@@ -1,0 +1,28 @@
+name: Prod - Build and Deploy sc-bar-react-next
+
+on:
+  workflow_run:
+    workflows: ['Lint and format sc-bar-react-next']
+    types:
+      - completed
+  push:
+    tags:
+      - v*
+
+  build-and-push:
+    needs: check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        run: |
+          docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/sc-bar-react-next:${GITHUB_REF#refs/tags/} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sc-bar-react-next:${GITHUB_REF#refs/tags/}
+        env:
+          DOCKER_CLI_ASK_CONFIRM: 'false'
