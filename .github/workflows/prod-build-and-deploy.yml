@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run lint
-      - run: npm run format 
+      - run: npm run format
 
   build-and-push:
     needs: check
