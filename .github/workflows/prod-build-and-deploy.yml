@@ -1,16 +1,32 @@
-name: Prod - Build and Deploy sc-bar-react-next
+name: prod-build-and-deploy
+
+run-name: Prod - build and deploy
 
 on:
-  workflow_run:
-    workflows: ['Lint and format sc-bar-react-next']
-    types:
-      - completed
   push:
     tags:
       - v*
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm run lint
+      - run: npm run format 
+
   build-and-push:
+    needs: check
     runs-on: ubuntu-latest
 
     steps:

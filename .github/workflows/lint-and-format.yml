@@ -1,9 +1,8 @@
-name: Lint and format sc-bar-react-next
+name: lint-and-format
 
-on:
-  push:
-    branches:
-      - '*'
+run-name: Lint and format
+
+on: [push]
 
 jobs:
   check:
